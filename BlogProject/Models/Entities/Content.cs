@@ -17,8 +17,10 @@ namespace BlogProject.Models.Entities
         [Required]
         public string Text { get; set; }
 
+        [ScaffoldColumn(false)] // scaffolding template oluştururken view'da oluşmasını engeller
         public DateTime CreDate { get; set; }
 
+        [ScaffoldColumn(false)]
         public int ViewCount { get; set; }
 
         [Required]
@@ -27,6 +29,7 @@ namespace BlogProject.Models.Entities
         public virtual Category Category { get; set; }
 
         [Required]
+        [ScaffoldColumn(false)]
         public int UserID { get; set; }
 
         public virtual AppUser User { get; set; }

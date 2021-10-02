@@ -6,6 +6,7 @@ using BlogProject.Models.Entities;
 using BlogProject.Models.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,24 @@ namespace BlogProject
 
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<BlogDbContext>();
 
+            // identity configuration...kullanýcý þifresinin formatýný belirledik...
+            services.Configure<IdentityOptions>(conf =>
+            {
+                conf.Password.RequireDigit = false;
+                conf.Password.RequireNonAlphanumeric = false;
+                conf.Password.RequiredLength = 3;
+                conf.Password.RequireLowercase = false;
+                conf.Password.RequireUppercase = false;
+            });
+
+            // oturum bilgilerini düzenleyelim..
+            services.ConfigureApplicationCookie(conf =>
+            {
+                conf.LoginPath = "/Account/Login"; // action pathleri
+                conf.LogoutPath = "/Account/LogOut"; // action pathleri
+                conf.AccessDeniedPath = "/AccessDenied"; // action pathleri /yetkisi olmayan yere gitmeye çalýþtýðýnda AcceessDenied controlleriýna yönlendir..
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,8 +70,9 @@ namespace BlogProject
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); //oturum aktif hale getiriyoruz..
 
+            app.UseAuthorization(); // role aktif hale getiriyoruz...
 
             app.UseEndpoints(endpoints =>
             {
