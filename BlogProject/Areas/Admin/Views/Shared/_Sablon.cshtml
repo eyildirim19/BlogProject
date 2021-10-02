@@ -257,6 +257,16 @@
             <!-- Main content -->
             <section class="content">
 
+                <div>
+
+
+                    @*@if (IsSectionDefined("mySection")) // alt sayfada section tanımlıysa,
+                        {
+                            @RenderSection("mySection")// section'ı render et...
+                        }*@
+
+                </div>
+
                 @RenderBody()
 
 
@@ -290,5 +300,13 @@
     <script src="../../dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
+
+    
+    @if (IsSectionDefined("scripts"))
+    {
+        @RenderSection("scripts")
+    }
+
+
 </body>
 </html>
