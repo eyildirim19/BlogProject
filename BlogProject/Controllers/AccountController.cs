@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BlogProject.Models;
+using BlogProject.Models.Entities;
 using BlogProject.Models.Identity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +18,18 @@ namespace BlogProject.Controllers
         UserManager<AppUser> userManager; // kullanıcı yönetimi  UserTablo
         RoleManager<AppRole> roleManager; // role yönetimi // Role tablosu
         SignInManager<AppUser> signInManager; // oturum yönetimi...
-        public AccountController(UserManager<AppUser> um, RoleManager<AppRole> rl, SignInManager<AppUser> sm)
+        IWebHostEnvironment environment;
+        BlogDbContext blogDbContext;
+
+        public AccountController(UserManager<AppUser> um, RoleManager<AppRole> rl, SignInManager<AppUser> sm, IWebHostEnvironment whe, BlogDbContext bdc)
         {
             userManager = um; // intance runtime'da startup dosyasındaki ConfigureServices meotundan alınarak otomatik olarak buraya gönderilir.. Bunun nedeni .net core'da dependency injection ve IOC mantığı vardır.. 
             roleManager = rl;
             signInManager = sm;
+            environment = whe;
+            blogDbContext = bdc;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -30,12 +40,18 @@ namespace BlogProject.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Login(AccountUserVM model)
         {
-            AppUser user = new AppUser();
-            user.Email = model.Email;
-            user.UserName = model.Email;
 
+            // modelden gelen email ile kullanıcı buluyoruz...
+            AppUser user = await userManager.FindByEmailAsync(model.Email); // email ile kullanıcı buluyoruz...
+
+            if (user == null)
+            {
+                ViewData["Mesaj"] = "Email adresiniz hatalı";
+                return View();
+            }
             var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
 
             if (result.Succeeded) // Başarılıysa...
@@ -44,7 +60,7 @@ namespace BlogProject.Controllers
             }
             else
             {
-                ViewData["Mesaj"] = "Hatalı kullancıadı veya şifre.";
+                ViewData["Mesaj"] = "Şifreniz hatalı.";
             }
 
             return View();
@@ -92,5 +108,35 @@ namespace BlogProject.Controllers
         }
 
 
+
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync(); // kullanıcı oturumunu kapat
+            return RedirectToAction("Index", "Home"); // anasayfaya yönlendir...
+        }
+
+
+        public IActionResult UpdateProfile()
+        {
+            return View();
+        }
+
+        // action'a formdan dosya verisi göndercekseniz parametre tipiniz IFormFile olmalıdır
+        [HttpPost]
+        public IActionResult UpdatePhoto(IFormFile file)
+        {
+            // dosyayı fiziki klasöre yazıyoruz...
+            var path = Path.Combine(environment.WebRootPath, "UploadProfilePicture/") + file.FileName;
+            FileStream st = new FileStream(path, FileMode.Create);
+            file.CopyTo(st);
+
+            // Dosyanın adını kullanıcın PicturePath alanına yazıyoruz...
+            AppUser user = blogDbContext.Users.FirstOrDefault(c => c.Email == User.Identity.Name);
+            user.PicturePath = file.FileName;
+            blogDbContext.SaveChanges();
+
+
+            return View("UpdateProfile");
+        }
     }
 }
