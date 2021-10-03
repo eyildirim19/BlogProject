@@ -26,7 +26,9 @@ namespace BlogProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //
+            // AddRazorRuntimeCompilation(); =>metodu için Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation packagesini uygulamanýza dahil etmeniz gerekiyor. Tabi bunu yaparken framework versiyonuzu kontrol edeniz. indiridiðiniz package framework destekli olmalý. 
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.AddDbContext<BlogDbContext>(option =>
             {
