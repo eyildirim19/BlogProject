@@ -16,6 +16,8 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="/assets/css/theme-1.css">
+    <link rel="stylesheet" href="~/css/mySite.css" />
+
 </head>
 
 <body>
@@ -38,7 +40,16 @@
                 </button>
                 <div id="navigation" class="collapse navbar-collapse flex-column">
                     <div class="profile-section pt-3 pt-lg-0">
-                        <img class="profile-image mb-3 rounded-circle mx-auto" src="/assets/images/profile.png" alt="image">
+
+
+
+                        @*<img class="profile-image mb-3 rounded-circle mx-auto" src="/assets/images/profile.png" alt="image">*@
+
+                        <!-- Oluşturulan componenti çağırıypruz....-->
+                        @*@{ await Component.InvokeAsync("ProfilePhoto")}*@
+
+                        @await Component.InvokeAsync("ProfilePhoto")
+
                         <br />
                         <div class="bio mb-3">
                             Hi, my name is Anthony Doe. Briefly introduce yourself here. You can also provide a link to the about page.<br><a asp-action="Index" asp-controller="AboutMe">Find out more about me</a>
@@ -69,9 +80,13 @@
                         <li class="nav-item active">
                             <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fas fa-home fa-fw mr-2"></i>Anasayfa <span class="sr-only">(current)</span></a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Posts"><i class="fas fa-bookmark fa-fw mr-2"></i>Yazılarım</a>
+                            @*<a class="nav-link" asp-action="Index" asp-controller="Posts"><i class="fas fa-bookmark fa-fw mr-2"></i>Yazılarım</a>*@
+                            <a id="BlogYazilarim" class="nav-link"><i class="fas fa-bookmark fa-fw mr-2"></i>Yazılarım</a>
                         </li>
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "AboutMe")"><i class="fas fa-user fa-fw mr-2"></i>Hakkımda</a>
                         </li>
@@ -113,6 +128,24 @@
                 <a id="config-close" class="close" href="#"><i class="fa fa-times-circle"></i></a>
             </div><!--//panel-inner-->
         </div><!--//configure-panel-->
+        <!--MyPanel-->
+
+        <div id="MyPanel">
+            <div id="Kulakcik">
+                <i class="fas fa-cog fa-spin mx-auto" data-fa-transform="down-6"></i>
+            </div>
+            <div id="Menu">
+                <div id="MenuClose">
+                    <b>X</b>
+                </div> 
+                <div id="navigation">
+                    @await Component.InvokeAsync("Categories")
+                </div>
+                
+            </div>
+        </div>
+
+
     </div>
 
     <!-- Javascript -->
@@ -131,7 +164,28 @@
             setTimeout(function () {
                 $("#dvPage").slideDown();
             }, 1000);
+
+            $("#BlogYazilarim").click(function () {
+                $("#MyPanel").animate({ right: "0px" });
+            });
+
+            $("#Kulakcik").click(function () {
+
+                //console.log("tıklandı...");
+                //$("#MyPanel").css("right", "0px");
+                // animate fonksiyonu stilleri animasyonlu uygulamak için kullanılır...
+                $("#MyPanel").animate({ right: "0px" });
+
+            });
+
+            $("#MenuClose").click(function () {
+                 $("#MyPanel").animate({ right: "-200px" });
+            });
         });
+
+
+
+
 
     </script>
 
