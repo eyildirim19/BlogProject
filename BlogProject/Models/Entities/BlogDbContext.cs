@@ -19,5 +19,7 @@ namespace BlogProject.Models.Entities
         public DbSet<Content> Contents { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Subscribe> Subscribe { get; set; }
     }
 }
