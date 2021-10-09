@@ -34,7 +34,7 @@ namespace BlogProject
             // json serialize iþlemlerinde json property nameleri yazým stilini camel case olarak uygulamasýn...
             services.AddMvc().AddJsonOptions(opt =>
             {
-                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+      opt.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
             services.AddDbContext<BlogDbContext>(option =>

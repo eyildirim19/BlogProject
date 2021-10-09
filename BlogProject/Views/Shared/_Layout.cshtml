@@ -103,11 +103,10 @@
         </header>
         <div class="main-wrapper">
 
-
+            <div class="alert" id="dvSiteMessage" style="display:none">
+            </div>
 
             @RenderBody()
-
-
 
         </div><!--//main-wrapper-->
         <!-- *****CONFIGURE STYLE (REMOVE ON YOUR PRODUCTION SITE)****** -->
@@ -137,11 +136,11 @@
             <div id="Menu">
                 <div id="MenuClose">
                     <b>X</b>
-                </div> 
+                </div>
                 <div id="navigation">
                     @await Component.InvokeAsync("Categories")
                 </div>
-                
+
             </div>
         </div>
 
@@ -186,7 +185,7 @@
             });
 
             $("#MenuClose").click(function () {
-                 $("#MyPanel").animate({ right: "-200px" });
+                $("#MyPanel").animate({ right: "-200px" });
             });
         });
     </script>

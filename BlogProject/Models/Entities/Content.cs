@@ -19,6 +19,13 @@ namespace BlogProject.Models.Entities
         [Display(Name = "İçerik")]
         public string Text { get; set; }
 
+
+        [Required]
+        [Display(Name = "Kısa Açıklama")]
+        [StringLength(300, ErrorMessage = "Maximin 300 karakter girilebilir")]
+        public string ShortText { get; set; }
+
+
         [ScaffoldColumn(false)] // scaffolding template oluştururken view'da oluşmasını engeller
         public DateTime CreDate { get; set; }
 

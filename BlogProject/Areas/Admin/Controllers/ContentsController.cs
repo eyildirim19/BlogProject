@@ -9,6 +9,8 @@ using BlogProject.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using BlogProject.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Mail;
+using System.Net;
 
 namespace BlogProject.Areas.Admin.Controllers
 {
@@ -65,23 +67,47 @@ namespace BlogProject.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Text,CategoryID")] Content content)
+        public async Task<IActionResult> Create([Bind("ID,Title,ShortText,Text,CategoryID")] Content content)
         {
             if (ModelState.IsValid)
             {
                 // context sınıfı üzerinden kullanıcı bilgilerini çektikk..
                 //AppUser user = _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name);
-            
+
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
                 content.UserID = user.Id;  // Contetin UserID alanına User'ın ID'sini set ediyoruz...
 
+                content.CreDate = DateTime.Now;
                 _context.Add(content);
                 await _context.SaveChangesAsync();
+
+                // Email Gönder....
+                // Email gönderilecek kullanıcı listesini bul...
+                List<Subscribe> subs = _context.Subscribe.ToList(); // email listesi...
+                foreach (var item in subs)
+                {
+                    string icerik = "<h1>Fırından Taze çıktı</h1><br /> <a href='http://blogprojectbt.com/Posts/'> " + content.Title + " </a>";
+                    MailMessage message = new MailMessage("btblogproject1@gmail.com", item.EmailAdress, "Yeni İçerik", icerik);
+                    message.IsBodyHtml = true;
+
+                    // makaleleri listele..
+                    using (SmtpClient smtp = new SmtpClient())
+                    {
+                        smtp.Host = "smtp.gmail.com";
+                        smtp.EnableSsl = true;
+                        NetworkCredential NetworkCred = new NetworkCredential("btblogproject1@gmail.com", "bt1234bt");
+                        smtp.UseDefaultCredentials = true;
+                        smtp.Credentials = NetworkCred;
+                        smtp.Port = 587;
+                        smtp.Send(message);
+                    }
+                }
+
                 return RedirectToAction(nameof(Index)); // index actionına yönlendirmişş....
             }
 
             ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name", content.CategoryID);
-          
+
             return View(content);
         }
 
@@ -108,7 +134,7 @@ namespace BlogProject.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Text,CategoryID")] Content content)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,ShortText,Text,CategoryID")] Content content)
         {
             if (id != content.ID)
             {

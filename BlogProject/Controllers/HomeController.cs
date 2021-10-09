@@ -28,7 +28,6 @@ namespace BlogProject.Controllers
 
             try
             {
-
                 if (String.IsNullOrWhiteSpace(semail1)) // değer null veya boşluk ise...
                 {
                     response.Code = OperationStatu.Error;
