@@ -29,20 +29,36 @@ namespace BlogProject.Controllers
             try
             {
 
-                Subscribe sb = new Subscribe();
-                sb.EmailAdress = semail1;
-                sb.CreDate = DateTime.Now;
+                if (String.IsNullOrWhiteSpace(semail1)) // değer null veya boşluk ise...
+                {
+                    response.Code = OperationStatu.Error;
+                    response.Message = "Lütfen Email Alanını KOntrol ediniz..";
+                    return Json(response); //metodu terket..
+                }
 
-                dbContext.Subscribe.Add(sb);
-                dbContext.SaveChanges();
+                // Email var mi? bakacaz...
+                Subscribe abone = dbContext.Subscribe.FirstOrDefault(c => c.EmailAdress == semail1.ToLower());
+                if (abone != null)
+                {
+                    // kullanıcıya hata dön...
+                    response.Code = OperationStatu.Error;
+                    response.Message = "Bu Email Adresi zaten kayıtlı. Lütfen tekrar deneyin";
+                }
+                else
+                {
+                    abone = new Subscribe();
+                    abone.CreDate = DateTime.Now;
+                    abone.EmailAdress = semail1.ToLower();
 
+                    dbContext.Subscribe.Add(abone);
+                    dbContext.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
                 response.Code = OperationStatu.Error;
                 response.Message = "Bir hata oluştu. Lütfen tekrar deneyiniz";
             }
-
             return Json(response);
         }
     }
