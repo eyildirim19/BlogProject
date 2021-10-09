@@ -10,7 +10,7 @@
                     @Model.Title
                 </a>
             </h3>
-            <div class="meta mb-1"><span class="date">Tarih : @Model.CreDate.ToShortDateString()</span><span class="time">@Model.ViewCount Okuma</span><span class="comment"><a>0 Yorum</a></span></div>
+            <div class="meta mb-1"><span class="date">Tarih : @Model.CreDate.ToShortDateString()</span><span class="time">@Model.ViewCount Okuma</span><span class="comment"><a>@Model.Comments.Count Yorum</a></span></div>
             <div class="intro">
                 @{
                     // ternary if.. (tek satır iki koşlluk if...)

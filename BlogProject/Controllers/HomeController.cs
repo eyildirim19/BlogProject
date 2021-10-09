@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlogProject.Models;
 using BlogProject.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogProject.Controllers
 {
@@ -17,7 +18,17 @@ namespace BlogProject.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            // take t-sqldeki top ifadesidir...
+            // select top 10 * from Contents;
+
+
+            // Include => ilişkili verileri getirmek için kullanılır
+            var result = dbContext.Contents.Include(c => c.Comments).OrderByDescending(c => c.ViewCount).Take(10)
+                .ToList();
+
+
+
+            return View(result);
         }
 
         public IActionResult PostSubscribe(string semail1)
