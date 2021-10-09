@@ -31,6 +31,12 @@ namespace BlogProject
             // AddRazorRuntimeCompilation(); =>metodu için Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation packagesini uygulamanýza dahil etmeniz gerekiyor. Tabi bunu yaparken framework versiyonuzu kontrol edeniz. indiridiðiniz package framework destekli olmalý. 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+            // json serialize iþlemlerinde json property nameleri yazým stilini camel case olarak uygulamasýn...
+            services.AddMvc().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
             services.AddDbContext<BlogDbContext>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("BlogConnection"));

@@ -157,6 +157,13 @@
     <script src="/assets/js/demo/style-switcher.js"></script>
 
 
+    @if (IsSectionDefined("PageScript"))
+    {
+        @RenderSection("PageScript") <!--pagescript sectionndaki pathleri render...-->
+    }
+
+
+
     <script>
 
         $(document).ready(function () {

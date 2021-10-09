@@ -9,7 +9,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="..\..\..\10%2529Asp.Net Core MVC\BlogProject\BlogProject\wwwroot\UploadProfilePicture\" />
     <Folder Include="wwwroot\Contents\" />
-    <Folder Include="wwwroot\lib\jquery-ajax-unobtrusive\" />
     <Folder Include="wwwroot\UploadProfilePicture\" />
   </ItemGroup>
 

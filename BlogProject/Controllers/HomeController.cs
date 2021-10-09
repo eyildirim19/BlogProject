@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlogProject.Models;
 using BlogProject.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,14 +22,28 @@ namespace BlogProject.Controllers
 
         public IActionResult PostSubscribe(string semail1)
         {
-            Subscribe sb = new Subscribe();
-            sb.EmailAdress = semail1;
-            sb.CreDate = DateTime.Now;
+            JsonResponse response = new JsonResponse();
+            response.Code = OperationStatu.Success;
+            response.Message = "Tebrik ederiz. Artı sizde bizim bir abonemizsiniz...";
 
-            dbContext.Subscribe.Add(sb);
-            dbContext.SaveChanges();
+            try
+            {
 
-            return RedirectToAction("Index");
+                Subscribe sb = new Subscribe();
+                sb.EmailAdress = semail1;
+                sb.CreDate = DateTime.Now;
+
+                dbContext.Subscribe.Add(sb);
+                dbContext.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                response.Code = OperationStatu.Error;
+                response.Message = "Bir hata oluştu. Lütfen tekrar deneyiniz";
+            }
+
+            return Json(response);
         }
     }
 }
