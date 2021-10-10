@@ -122,7 +122,6 @@ namespace BlogProject.Controllers
         [HttpPost]
         public IActionResult UpdatePhoto(IFormFile file)
         {
-
             string fileName = Guid.NewGuid().ToString();  // guid bir değer veriyirouz
             string extension = Path.GetExtension(file.FileName); // dosya isminden uzantıyı buluyoruz...
             string newFileName = fileName + extension;
@@ -134,9 +133,8 @@ namespace BlogProject.Controllers
 
             // Dosyanın adını kullanıcın PicturePath alanına yazıyoruz...
             AppUser user = blogDbContext.Users.FirstOrDefault(c => c.Email == User.Identity.Name);
-            user.PicturePath = file.FileName;
+            user.PicturePath = newFileName;
             blogDbContext.SaveChanges();
-
 
             return View("UpdateProfile");
         }

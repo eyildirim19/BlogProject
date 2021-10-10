@@ -28,11 +28,11 @@
                 <div class="be-comment-block">
                     <h1 class="comments-title">Comments ( @Model.Comments.Count(c => c.IsApprove == true) )</h1>
 
-                    @foreach (var item in Model.Comments.Where(c => c.IsApprove == true))
+                    @foreach (var item in Model.Comments.Where(c => c.IsApprove == true && c.CommentID == null)) // parent commentleri getir...
                     {
                         <div class="be-comment">
                             <div class="be-img-comment">
-                                <a href="blog-detail-2.html">
+                                <a href="#">
                                     <img src="~/UploadProfilePicture/@item.User.PicturePath" alt="" class="be-ava-comment">
                                 </a>
                             </div>
@@ -44,11 +44,58 @@
                                     <i class="fa fa-clock-o"></i>
                                     @item.CreDate.ToShortDateString()
                                 </span>
-                                <p class="be-comment-text">
+                                <div class="be-comment-text">
                                     @item.Text
-                                </p>
+                                    <br />
+                                    <div class="CevapParent" style="cursor:pointer;">
+                                        <div class="text-right"> <b class="cevapAction">  Cevapla..</b></div>
+                                        <br />
+                                        <div class="cevapForm col-lg-12" style="display:none;">
+                                            <form class="form-block" asp-action="AddCommentCevap" asp-controller="Posts" data-ajax="true" data-ajax-success="OnSucessComment">
+                                                <textarea style="height:70px;" class="form-control" id="txtSubComment" name="text"></textarea>
+                                                <input type="hidden" name="parentCommentId" value="@item.ID" />
+                                                <input type="hidden" name="contentId" value="@Model.ID" />
+                                                <br />
+                                                <input type="submit" class="btn btn-info" value="Cevap Ver" />
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    @{
+                                        List<Comment> comList = (List<Comment>)ViewData["SubComments"]; // alt yorumları çıkarttık...
+                                    }
+
+                                    @foreach (var subitem in comList.Where(c=> c.CommentID == item.ID).OrderByDescending(c => c.CreDate))
+                                    {
+                                        <div class="be-comment">
+                                            <div class="be-img-comment">
+                                                <a href="#">
+                                                    <img src="~/UploadProfilePicture/@subitem.User.PicturePath" alt="" class="be-ava-comment">
+                                                </a>
+                                            </div>
+                                            <div class="be-comment-content">
+                                                <span class="be-comment-name">
+                                                    <a href="#">@subitem.User.FullName</a>
+                                                </span>
+                                                <span class="be-comment-time">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    @subitem.CreDate.ToShortDateString()
+                                                </span>
+                                                <div class="be-comment-text">
+                                                    @subitem.Text
+                                                    <br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                    @*@Html.Raw(MySubComment(item.ID))*@
+                                </div>
                             </div>
                         </div>
+                        <br />
+                        <br />
                     }
 
                     @if (User.Identity.IsAuthenticated)
@@ -94,7 +141,19 @@
                                     }, 3000);
 
                                     $("#txtComment").val(""); // comment textareanın textini temizliyoruz...
+                                    $("#txtSubComment").val("");
+                                    $(".CevapParent").fadeOut(); // gizle
                                 }
+
+                                $(".cevapAction").click(function () {
+
+                                    //$(this) tıklanan element
+                                    //closest(".CevapParent") tıklanan elementin parent'ı
+                                    // find(".cevapForm") tıklanan elementin parentının child'ı
+                                    // fadeToggle aç / kapa
+                                    $(this).closest(".CevapParent").find(".cevapForm").fadeToggle();
+                                });
+
                             </script>
 
                         }
