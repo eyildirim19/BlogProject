@@ -28,7 +28,7 @@ namespace BlogProject.Components
                 var user = blogDbContext.Users.FirstOrDefault(c => c.Email == User.Identity.Name);
                 if (user.PicturePath != null) // profil resmi yüklediyse....
                 {
-                    filePicturePath = "UploadProfilePicture/" + user.PicturePath;
+                    filePicturePath = "/UploadProfilePicture/" + user.PicturePath;
                 }
             }
             //ViewData["photoPath"] = filePicturePath;
