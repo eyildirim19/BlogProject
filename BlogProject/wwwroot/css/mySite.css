@@ -2,37 +2,44 @@
 }
 
 
+/* mesaj gösterdiğimiz divimizi sayfanın tepesine sabitliyoruz. fixed olduğu için pencereinin top'unda sabit bekleyecektir...*/
+#dvSiteMessage {
+    display: none;
+    position: fixed;
+    top: 0px;
+    width:100%;
+}
 
 #MyPanel {
-    position:fixed; /* sayfada sabitliyoruz...*/
-    top:200px;
-    right:-200px;
-    width:250px;
+    position: fixed; /* sayfada sabitliyoruz...*/
+    top: 200px;
+    right: -200px;
+    width: 250px;
 }
 
 #Kulakcik {
     background-color: #223142;
     width: 50px;
     height: 40px;
-    margin-top:20px;
+    margin-top: 20px;
     float: left;
     cursor: pointer;
-    color:white;
-    font-weight:bold;
-    text-align:center;
-    font-size:20px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
 }
 
 #Menu {
     background-color: #223142;
     width: 200px;
     float: left;
-    padding-left:50px;
+    padding-left: 50px;
 }
 
-#Menu a{
-    color:white;
-}
+    #Menu a {
+        color: white;
+    }
 
 #MenuClose {
     cursor: pointer;
@@ -158,15 +165,3 @@ body {
 .form-group textarea.form-input {
     height: 150px;
 }
-
-
-
-
-
-
-
-
-
-
-
-

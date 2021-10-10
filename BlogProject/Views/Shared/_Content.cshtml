@@ -6,7 +6,7 @@
         <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="/assets/images/blog/blog-post-thumb-7.jpg" alt="image">
         <div class="media-body">
             <h3 class="title mb-1">
-                <a asp-action="Detail" asp-controller="Posts" asp-route-id="@Model.ID" asp-area="">
+                <a asp-action="Detail" asp-controller="Posts" asp-route-id="@Model.ID">
                     @Model.Title
                 </a>
             </h3>
@@ -19,7 +19,7 @@
                 @Html.Raw(GosterilecekText)
                 ...
             </div>
-            <a class="more-link" asp-action="Detail" asp-controller="Posts" asp-route-id="@Model.ID" asp-area="">Devamını Oku &rarr;</a>
+            <a class="more-link" asp-action="Detail" asp-controller="Posts" asp-route-id="@Model.ID">Devamını Oku &rarr;</a>
         </div><!--//media-body-->
     </div><!--//media-->
 </div>

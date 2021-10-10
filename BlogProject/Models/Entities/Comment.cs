@@ -12,12 +12,14 @@ namespace BlogProject.Models.Entities
         public int UserID { get; set; }
         public virtual AppUser User { get; set; }
 
-        
+
         public int? ContentID { get; set; }
         public virtual Content Content { get; set; }
 
         [Required]
         public string Text { get; set; }
         public DateTime CreDate { get; set; }
+
+        public bool IsApprove { get; set; }
     }
 }
